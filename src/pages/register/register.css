@@ -1,11 +1,29 @@
-@media only screen and (max-width:768px)
-{
-    .regmotham
-    {
-        display: block;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        padding-top: 200px;
+@media only screen and (max-width: 768px) {
+    .regmotham {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f1f7fd;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
+        max-width: 90%;
+    }
+    .ant-form-item {
+        margin-bottom: 16px;
+    }
+    .ant-input, .ant-btn {
+        border-radius: 5px;
+    }
+    .ant-btn-primary {
+        background-color: #1D2C4E;
+        border-color: #1D2C4E;
+    }
+    .ant-btn-primary:hover {
+        background-color: #163a6b;
+        border-color: #163a6b;
     }
 }

@@ -5,9 +5,19 @@ import Reedem from '../../components/Redeem/Reedem';
 
 function Home() {
   const [activeButton, setActiveButton] = useState('redeem'); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleButtonClick = (buttonValue) => {
     setActiveButton(buttonValue); 
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText("Referral ID");
+    alert("Referral ID copied to clipboard!");
   };
 
   const renderContent = () => {
@@ -31,7 +41,7 @@ function Home() {
     <div className='veed'>
       <div className="vhead">
         <div className="veednav">
-          <div className="veednav1">
+          <div className="veednav1" onClick={toggleModal}>
             <h3>Alex Emmatty</h3>
             <p>Referral ID</p>
           </div>
@@ -80,6 +90,19 @@ function Home() {
           {renderContent()}
         </div>
       </div>
+
+      {isModalOpen && (
+        <div className="modal-backdrop" onClick={toggleModal}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content">
+              <span className="close" onClick={toggleModal}>&times;</span>
+              <h3>Alex Emmatty</h3>
+              <p>Referral ID: <span id="referral-id">12345</span></p>
+              <button className="copy-button" onClick={copyToClipboard}>Copy Referral ID</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
