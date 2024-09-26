@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './home.css';
 import Coins from "../../img/coins.png";
+import Reedem from '../../components/Redeem/Reedem';
 
 function Home() {
   const [activeButton, setActiveButton] = useState('redeem'); 
@@ -12,7 +13,9 @@ function Home() {
   const renderContent = () => {
     switch (activeButton) {
       case 'redeem':
-        return <div className="content">Redeem Content</div>;
+        return <div className="content">
+          <Reedem/>
+        </div>;
       case 'send':
         return <div className="content">Send Content</div>;
       case 'recieve':
