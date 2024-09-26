@@ -1,37 +1,48 @@
-@media only screen and (max-width:768px)
-{
-    .loginmotham
-    {
+@media only screen and (max-width: 768px) {
+    .loginmotham {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
         background-color: #f1f7fd;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
+        max-width: 90%;
     }
-    .theloginmenu
-    {
-        display: block;
+    .theloginmenu {
         width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        padding-top: 100px;
     }
-    .headme 
-    {
+    .headme {
         text-align: center;
+        margin-bottom: 20px;
     }
-    .headme h3
-    {
-        color: var(--Danube-950, #1D2C4E);
-    font-family: Onest;
-    font-size: 48px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+    .headme h3 {
+        color: #1D2C4E;
+        font-family: 'Onest', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
     }
-    .headme p
-    {
-        color: var(--Danube-950, #1D2C4E);
-font-family: Onest;
-font-size: 20px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
+    .headme p {
+        color: #1D2C4E;
+        font-family: 'Onest', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+    }
+    .ant-form-item {
+        margin-bottom: 16px;
+    }
+    .ant-input, .ant-btn {
+        border-radius: 5px;
+    }
+    .ant-btn-primary {
+        background-color: #1D2C4E;
+        border-color: #1D2C4E;
+    }
+    .ant-btn-primary:hover {
+        background-color: #163a6b;
+        border-color: #163a6b;
     }
 }
