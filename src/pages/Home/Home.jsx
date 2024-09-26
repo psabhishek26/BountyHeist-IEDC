@@ -1,41 +1,84 @@
-import React from 'react';
-// import Bounty from "../../img/bounty.png";
-import { Button, Flex } from 'antd';
+import React, { useState } from 'react';
 import './home.css';
 import Coins from "../../img/coins.png";
-import { Link } from 'react-router-dom';
 
 function Home() {
+  const [activeButton, setActiveButton] = useState('redeem'); 
+
+  const handleButtonClick = (buttonValue) => {
+    setActiveButton(buttonValue); 
+  };
+
+  const renderContent = () => {
+    switch (activeButton) {
+      case 'redeem':
+        return <div className="content">Redeem Content</div>;
+      case 'send':
+        return <div className="content">Send Content</div>;
+      case 'recieve':
+        return <div className="content">Receive Content</div>;
+      case 'tasks':
+        return <div className="content">Tasks Content</div>;
+      default:
+        return <div className="content">Please select an option</div>;
+    }
+  };
+
   return (
     <div className='veed'>
-        <div className="vhead">
-            <div className="veednav">
-            {/* <button className='buttonme'>Profile</button> */}
-            <div className="veednav1">
+      <div className="vhead">
+        <div className="veednav">
+          <div className="veednav1">
             <h3>Alex Emmatty</h3>
-            <p>9UVV-07FE</p>
-            </div>
-            </div>
-            <div className="veedcoins">
-                <img src={Coins} alt="Coins" />
-                <p>100</p>
-            </div>
-            
+            <p>Referral ID</p>
+          </div>
         </div>
-        <div className="veedtask">
+        <div className="veedcoins">
+          <img src={Coins} alt="Coins" />
+          <p>100</p>
+        </div>
+      </div>
+      
+      <div className="veedtask">
         <div className="veedmenu">
-                <div className="veedmenu1">
-                <button className='veedlink' value="redeem" >Redeem</button>
-                <button className='veedlinkmon' value="send" >Send</button>
-                <button className='veedlinkmon' value="recieve" >Recieve</button>
-                <button className='veedlinkmon' value="tasks" >Tasks</button>
-            </div>
-            </div>
-            </div>
-        
-        
+          <div className="veedmenu1">
+            <button
+              className={activeButton === 'redeem' ? 'veedlink' : 'veedlinkmon'}
+              value="redeem"
+              onClick={() => handleButtonClick('redeem')}
+            >
+              Redeem
+            </button>
+            <button
+              className={activeButton === 'send' ? 'veedlink' : 'veedlinkmon'}
+              value="send"
+              onClick={() => handleButtonClick('send')}
+            >
+              Send
+            </button>
+            <button
+              className={activeButton === 'recieve' ? 'veedlink' : 'veedlinkmon'}
+              value="recieve"
+              onClick={() => handleButtonClick('recieve')}
+            >
+              Recieve
+            </button>
+            <button
+              className={activeButton === 'tasks' ? 'veedlink' : 'veedlinkmon'}
+              value="tasks"
+              onClick={() => handleButtonClick('tasks')}
+            >
+              Tasks
+            </button>
+          </div>
+        </div>
+
+        <div className="veedcontent">
+          {renderContent()}
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
