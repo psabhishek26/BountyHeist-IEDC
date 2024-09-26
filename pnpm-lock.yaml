@@ -14,6 +14,9 @@ importers:
       antd:
         specifier: ^5.21.1
         version: 5.21.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      pnpm:
+        specifier: ^9.11.0
+        version: 9.11.0
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1221,6 +1224,11 @@ packages:
 
   picocolors@1.1.0:
     resolution: {integrity: sha512-TQ92mBOW0l3LeMeyLV6mzy/kWr8lkd/hp3mTg7wYK7zJhuBStmGMBG0BdeDZS/dZx1IukaX6Bk11zcln25o1Aw==}
+
+  pnpm@9.11.0:
+    resolution: {integrity: sha512-CiA/+u1aP2MkLNBkyPtYkjZsED4ygHkxj3gGLyTqjJ1QvGpHqjVnyr79gk0XDnj6J0XtHxaxMuFkNhRrdojxmw==}
+    engines: {node: '>=18.12'}
+    hasBin: true
 
   possible-typed-array-names@1.0.0:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
@@ -3052,6 +3060,8 @@ snapshots:
   path-parse@1.0.7: {}
 
   picocolors@1.1.0: {}
+
+  pnpm@9.11.0: {}
 
   possible-typed-array-names@1.0.0: {}
 

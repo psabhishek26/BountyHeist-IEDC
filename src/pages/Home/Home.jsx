@@ -3,6 +3,7 @@ import './home.css';
 import Coins from "../../img/coins.png";
 import Reedem from '../../components/Redeem/Reedem';
 import Receive from '../../components/Receive/Receive';
+import { CopyOutlined } from '@ant-design/icons'; 
 
 function Home() {
   const [activeButton, setActiveButton] = useState('redeem'); 
@@ -17,7 +18,8 @@ function Home() {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText("Referral ID");
+    const referralId = document.getElementById("referral-id").textContent;
+    navigator.clipboard.writeText(referralId);
     alert("Referral ID copied to clipboard!");
   };
 
@@ -97,9 +99,14 @@ function Home() {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-content">
               <span className="close" onClick={toggleModal}>&times;</span>
-              <h3>Alex Emmatty</h3>
-              <p>Referral ID: <span id="referral-id">12345</span></p>
-              <button className="copy-button" onClick={copyToClipboard}>Copy Referral ID</button>
+              <h3 style={{ textAlign: 'center' }}>Alex Emmatty</h3>
+              <p style={{ textAlign: 'center' }}>
+                Referral ID: <span id="referral-id">12345</span>
+                <CopyOutlined 
+                  onClick={copyToClipboard} 
+                  style={{ marginLeft: '10px', color: 'black', cursor: 'pointer' }} 
+                />
+              </p>
             </div>
           </div>
         </div>
