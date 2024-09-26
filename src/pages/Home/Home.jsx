@@ -13,7 +13,7 @@ function Home() {
             {/* <button className='buttonme'>Profile</button> */}
             <div className="veednav1">
             <h3>Alex Emmatty</h3>
-            <p>Refferral ID</p>
+            <p>9UVV-07FE</p>
             </div>
             </div>
             <div className="veedcoins">
