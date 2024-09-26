@@ -1,0 +1,106 @@
+@media only screen and (max-width:768px)
+{
+    .tasku
+    {
+        padding-top: 35px;
+    }
+.taskup
+{
+    color: #1D2C4E;
+font-family: Onest;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+text-align: center;
+}
+.taskgrid
+{
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+    padding-top: 20px;
+    padding-left: 10px;
+    width: 100%;
+}
+.taskind
+{
+    width: 80%;
+    padding: 10px;
+    border-radius: 20px;
+border: 1px solid var(--Danube-400, #70B0EA);
+background: var(--Danube-50, #F1F7FD);
+box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10);
+}
+.taskind h3
+{
+    color: var(--Danube-950, #1D2C4E);
+font-family: Onest;
+font-size: 20px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+margin: 0;
+}
+.taskind p
+{
+    color: #1D2C4E;
+font-family: Onest;
+font-size: 12px;
+font-style: normal;
+font-weight: 300;
+line-height: normal;
+word-break: break-all;
+}
+.tcoin
+{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 10px;
+
+}
+.tcoin img
+{
+    width: 30px;
+    height: 30px;
+}
+.tcoin p
+{
+    overflow: hidden;
+color: var(--Danube-950, #1D2C4E);
+text-overflow: ellipsis;
+font-family: Onest;
+font-size: 20px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+margin: 0;
+
+}
+.comp
+{
+    border-radius: 30px;
+    border: 1px solid rgba(77, 33, 20, 0.52);
+    background: linear-gradient(148deg, #FFE63D -23.58%, #FFB245 130.63%);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+    color: var(--Danube-50, #F1F7FD);
+    font-family: Onest;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border: none;
+    display: flex;
+    width: 95px;
+    height: 32px;
+    padding: 7px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+}

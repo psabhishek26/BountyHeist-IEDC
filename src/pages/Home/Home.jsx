@@ -5,6 +5,8 @@ import Redeem from '../../components/Redeem/Reedem';
 import Receive from '../../components/Receive/Receive';
 import { CopyOutlined } from '@ant-design/icons'; 
 import { Button, message, Space } from 'antd';
+import Send from '../../components/Send/Send';
+import Tasks from '../../components/Tasks/Tasks';
 
 function Home() {
   const [activeButton, setActiveButton] = useState('redeem'); 
@@ -47,11 +49,11 @@ function Home() {
           <Redeem/>
         </div>;
       case 'send':
-        return <div className="content">Send Content</div>;
+        return <div className="content"><Send/></div>;
       case 'receive':
         return <div className="content"><Receive/></div>;
       case 'tasks':
-        return <div className="content">Tasks Content</div>;
+        return <div className="content"><Tasks/></div>;
       default:
         return <div className="content">Please select an option</div>;
     }
