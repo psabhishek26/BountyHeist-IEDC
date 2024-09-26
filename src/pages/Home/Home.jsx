@@ -1,26 +1,43 @@
 import React, { useState } from 'react';
 import './home.css';
 import Coins from "../../img/coins.png";
-import Redeem from '../../components/Redeem/Redeem';
+import Redeem from '../../components/Redeem/Reedem';
 import Receive from '../../components/Receive/Receive';
 import { CopyOutlined } from '@ant-design/icons'; 
+import { Button, message, Space } from 'antd';
 
 function Home() {
   const [activeButton, setActiveButton] = useState('redeem'); 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [visible, setVisible] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'This is a success message',
+    });
+  };
 
   const handleButtonClick = (buttonValue) => {
     setActiveButton(buttonValue); 
+  };
+  const handleClose = () => {
+    setVisible(false);
   };
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+  // const alert = <Alert message="Success Tips" type="success" showIcon />
 
   const copyToClipboard = () => {
     const referralId = document.getElementById("referral-id").textContent;
     navigator.clipboard.writeText(referralId);
-    alert("Referral ID copied to clipboard!");
+    messageApi.open({
+      type: 'success',
+      content: 'Referral Id Copied Sucessfully !',
+    });
   };
 
   const renderContent = () => {
@@ -42,6 +59,16 @@ function Home() {
 
   return (
     <div className='veed'>
+      {contextHolder}
+      {/* {visible ? (
+        <Alert
+          message="Success Tips"
+          description="Detailed description and advice about successful copywriting."
+          type="success"
+          closable
+          onClose={handleClose}
+        />
+      ) : null} */}
       <div className="vhead">
         <div className="veednav">
           <div className="veednav1" onClick={toggleModal}>

@@ -149,6 +149,25 @@ border: none;
 background: #FFF;
 
     }
+    .modal-content h3
+    {
+      color: var(--Danube-950, #1D2C4E);
+font-family: Onest;
+font-size: 24px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+margin: 0;
+    }
+    .modal-content p
+    {
+      color: var(--Danube-950, #1D2C4E);
+font-family: Onest;
+font-size: 14px;
+font-style: italic;
+font-weight: 400;
+line-height: normal;
+    }
     
 }
 
@@ -239,4 +258,5 @@ background: #FFF;
     opacity: 1;
     transform: scale(1);
   }
+ 
 }
