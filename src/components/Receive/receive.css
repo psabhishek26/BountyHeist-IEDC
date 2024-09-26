@@ -1,0 +1,58 @@
+.redeemdiv
+{
+    padding-top: 35px;
+    text-align: center;
+}
+.redeemdiv h3{
+    color: var(--Danube-950, #1D2C4E);
+font-family: Onest;
+font-size: 24px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+margin: 0;
+}
+.redeemdiv p
+{
+    color: #000;
+font-family: Onest;
+font-size: 12px;
+font-style: normal;
+font-weight: 300;
+line-height: normal;
+margin: 0;
+}
+.redsub
+{
+    display: flex;
+width: 127px;
+height: 32px;
+padding: 7px 20px;
+justify-content: center;
+align-items: center;
+gap: 10px;
+flex-shrink: 0;
+border-radius: 30px;
+border: 1px solid rgba(77, 33, 20, 0.52);
+background: linear-gradient(148deg, #FFE63D -23.58%, #FFB245 130.63%);
+box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+color: var(--Danube-50, #F1F7FD);
+font-family: Onest;
+font-size: 20px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+margin-left: auto;
+margin-right: auto;
+margin-top: 20px;
+border: none;
+}
+.optt
+{
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-top: 24px;
+    color: var(--Danube-950, #1D2C4E);
+font-family: Onest;
+
+}

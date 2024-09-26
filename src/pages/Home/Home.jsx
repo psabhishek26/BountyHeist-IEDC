@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './home.css';
 import Coins from "../../img/coins.png";
 import Reedem from '../../components/Redeem/Reedem';
+import Receive from '../../components/Receive/Receive';
 
 function Home() {
   const [activeButton, setActiveButton] = useState('redeem'); 
@@ -29,7 +30,7 @@ function Home() {
       case 'send':
         return <div className="content">Send Content</div>;
       case 'recieve':
-        return <div className="content">Receive Content</div>;
+        return <div className="content"><Receive/></div>;
       case 'tasks':
         return <div className="content">Tasks Content</div>;
       default:
