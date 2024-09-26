@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './home.css';
 import Coins from "../../img/coins.png";
-import Reedem from '../../components/Redeem/Reedem';
+import Redeem from '../../components/Redeem/Redeem';
 import Receive from '../../components/Receive/Receive';
 import { CopyOutlined } from '@ant-design/icons'; 
 
@@ -27,11 +27,11 @@ function Home() {
     switch (activeButton) {
       case 'redeem':
         return <div className="content">
-          <Reedem/>
+          <Redeem/>
         </div>;
       case 'send':
         return <div className="content">Send Content</div>;
-      case 'recieve':
+      case 'receive':
         return <div className="content"><Receive/></div>;
       case 'tasks':
         return <div className="content">Tasks Content</div>;
@@ -73,11 +73,11 @@ function Home() {
               Send
             </button>
             <button
-              className={activeButton === 'recieve' ? 'veedlink' : 'veedlinkmon'}
-              value="recieve"
-              onClick={() => handleButtonClick('recieve')}
+              className={activeButton === 'receive' ? 'veedlink' : 'veedlinkmon'}
+              value="receive"
+              onClick={() => handleButtonClick('receive')}
             >
-              Recieve
+              Receive
             </button>
             <button
               className={activeButton === 'tasks' ? 'veedlink' : 'veedlinkmon'}
