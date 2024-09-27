@@ -6,6 +6,7 @@ import {BrowserRouter as Router , Routes , Route, BrowserRouter} from 'react-rou
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import Home from './pages/Home/Home';
+import Landing from './pages/Landing/Landing';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/register" element={<Register/>} />
           <Route path='/login' element = {<Login/>} />
+          <Route path='/landing' element = {<Landing/>} />
         </Routes>
       </BrowserRouter>
     </>
