@@ -1,0 +1,27 @@
+@media only screen and (max-width:768px)
+{
+    .comingsoon
+    {
+        background-image: url("../../img/story.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 100%;
+        height: 100vh;
+        position:relative;
+    }
+    .comingsoon h3
+    {
+        color: var(--Danube-50, #F1F7FD);
+font-family: Onest;
+font-size: 34px;
+margin: 0;
+position: absolute;
+bottom: 150px;
+text-align: center;
+font-style: normal;
+width: 100%;
+font-weight: 700;
+line-height: normal;
+    }
+}

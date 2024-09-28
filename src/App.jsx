@@ -7,6 +7,7 @@ import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import Home from './pages/Home/Home';
 import Landing from './pages/Landing/Landing';
+import ComingSoon from './pages/ComingSoon/ComingSoon';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -15,7 +16,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home/>} />
+          <Route path="/home" element={<Home/>} />
+          <Route path="/" element={<ComingSoon/>} />
           <Route path="/register" element={<Register/>} />
           <Route path='/login' element = {<Login/>} />
           <Route path='/landing' element = {<Landing/>} />
