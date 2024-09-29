@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './home.css';
 import Coins from "../../img/coins.png";
 import Redeem from '../../components/Redeem/Reedem';
@@ -7,8 +7,10 @@ import { CopyOutlined } from '@ant-design/icons';
 import { Button, message, Space } from 'antd';
 import Send from '../../components/Send/Send';
 import Tasks from '../../components/Tasks/Tasks';
+import { UserContext } from '../../context/UserContext';
 
 function Home() {
+  const { user } = useContext(UserContext);
   const [activeButton, setActiveButton] = useState('redeem'); 
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [visible, setVisible] = useState(false);
@@ -74,13 +76,13 @@ function Home() {
       <div className="vhead">
         <div className="veednav">
           <div className="veednav1" onClick={toggleModal}>
-            <h3>Alex Emmatty</h3>
+            <h3>{user.username}</h3>
             <p>Referral ID</p>
           </div>
         </div>
         <div className="veedcoins">
           <img src={Coins} alt="Coins" />
-          <p>100</p>
+          <p>{user.coins}</p>
         </div>
       </div>
       
@@ -128,9 +130,9 @@ function Home() {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-content">
               <span className="close" onClick={toggleModal}>&times;</span>
-              <h3 style={{ textAlign: 'center' }}>Alex Emmatty</h3>
+              <h3 style={{ textAlign: 'center' }}>{user.username}</h3>
               <p style={{ textAlign: 'center' }}>
-                Referral ID: <span id="referral-id">12345</span>
+                Referral ID: <span id="referral-id">{user.referralCode}</span>
                 <CopyOutlined 
                   onClick={copyToClipboard} 
                   style={{ marginLeft: '10px', color: 'black', cursor: 'pointer' }} 
