@@ -86,6 +86,11 @@ background: var(--Danube-50, #F1F7FD);
 box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10);
 margin-top: 25px;
 }
+.code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .sendmain h3
 {
     color: var(--Danube-950, #1D2C4E);
