@@ -3,6 +3,8 @@
     
     .tasku
     {
+        flex: 1;
+        padding: 10px;
         padding-top: 35px;
     }
 .taskup
@@ -13,6 +15,7 @@ font-size: 14px;
 font-style: normal;
 font-weight: 400;
 line-height: normal;
+width: 95%;
 text-align: center;
 }
 .loading {

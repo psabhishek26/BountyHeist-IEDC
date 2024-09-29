@@ -28,7 +28,7 @@ function Landing() {
         const coins = usersData[userId]?.coins || 0;
         const username = usersData[userId]?.username;
         leaderboardArray.push({ userId, coins, username });
-        i = i + 1
+        i = i + 1;
       }
 
       leaderboardArray.sort((a, b) => b.coins - a.coins);
@@ -59,13 +59,11 @@ function Landing() {
         ) : (
           leaderboard.map((user, index) => (
             <div className="leaders" key={index}>
-              <h3>{index + 1}</h3>
+              <h3>{index+1}</h3>
               <div className="leaddet">
-                <div className="mejoin">
-                  <img src={Kuttu} alt="Kuttu" />
-                  <p>@{user.username}</p>
-                </div>
-                <div className="mejoin">
+                <img src={Kuttu} alt="Kuttu" />
+                <p>@{user.username}</p>
+                <div className="mejoin-coins">
                   <img className="nanayam" src={Coins} alt="coiner" />
                   <h3>{user.coins}</h3>
                 </div>
