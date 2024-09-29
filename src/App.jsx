@@ -1,7 +1,6 @@
 import "./App.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
 import Home from "./pages/Home/Home";
 import Landing from "./pages/Landing/Landing";
 import ComingSoon from "./pages/ComingSoon/ComingSoon";
@@ -48,7 +47,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/coming" element={<ComingSoon />} />
         <Route path="/landing" element={<Landing />} />

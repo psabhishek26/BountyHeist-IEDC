@@ -1,44 +1,77 @@
 import React, { useContext } from "react";
 import "./login.css";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Row, Col, message } from "antd";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleOutlined } from "@ant-design/icons";
+import { Button, message } from "antd";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../../firebase";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, set, get } from "firebase/database";
+import { generateCodeSix } from "../../utils/Utils";
 
 const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
-  
-  const onFinish = (values) => {
-    const { email, password } = values;
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        if (user) {
-          const db = getDatabase();
-          const userRef = ref(db, "users/" + user.uid);
 
-          onValue(userRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-              setUser(data);
-              navigate("/");
-              message.success("Login successful!");
-            }
-          });
+  const generateUniqueCode = async () => {
+    const db = getDatabase();
+    let newCode;
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    do {
+      newCode = generateCodeSix();
+      const codeRef = ref(db, `referrals/${newCode}`);
+      const snapshot = await get(codeRef);
+      if (!snapshot.exists()) {
+        return newCode;
+      }
+      attempts++;
+    } while (attempts < maxAttempts);
+
+    throw new Error("Failed to generate a unique code. Please try again.");
+  };
+
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      if (user) {
+        const db = getDatabase();
+        const userRef = ref(db, "users/" + user.uid);
+
+        const snapshot = await get(userRef);
+
+        if (!snapshot.exists()) {
+          const uniqueCode = await generateUniqueCode();
+
+          const userData = {
+            username: user.displayName,
+            email: user.email,
+            uid: user.uid,
+            coins: 100,
+            referralCode: uniqueCode,
+          };
+
+          await set(ref(db, `users/${user.uid}`), userData);
+          await set(ref(db, `referrals/${uniqueCode}`), { uid: user.uid });
+
+          setUser(userData);
         } else {
-          setUser(null);
+          const data = snapshot.val();
+          setUser(data);
         }
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error("Login error:", errorCode, errorMessage);
-        message.error("Login failed: " + errorMessage);
-      });
+
+        navigate("/");
+        message.success("Login successful!");
+      }
+    } catch (error) {
+      console.error("Google Login error:", error);
+      message.error("Google login failed: " + error.message);
+    }
   };
 
   return (
@@ -47,47 +80,16 @@ const Login = () => {
         <h3>Bounty Heist</h3>
         <p>IEDC JECC</p>
       </div>
-      <Form
-        className="theloginmenu"
-        name="login"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-      >
-        <Form.Item
-          name="email"
-          rules={[{ required: true, message: "Please input your Email!" }]}
+      <div className="theloginmenu">
+        <Button
+          block
+          type="primary"
+          icon={<GoogleOutlined />}
+          onClick={handleGoogleLogin}
         >
-          <Input prefix={<UserOutlined />} placeholder="Email" />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please input your Password!" }]}
-        >
-          <Input
-            prefix={<LockOutlined />}
-            type="password"
-            placeholder="Password"
-          />
-        </Form.Item>
-        <Form.Item>
-          <Row justify="space-between" align="middle">
-            <Col>
-              <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-            </Col>
-            <Col>
-              <a href="">Forgot password</a>
-            </Col>
-          </Row>
-        </Form.Item>
-        <Form.Item>
-          <Button block type="primary" htmlType="submit">
-            Log in
-          </Button>
-          or <a href="/register">Register now!</a>
-        </Form.Item>
-      </Form>
+          Sign in with Google
+        </Button>
+      </div>
     </div>
   );
 };
