@@ -22,7 +22,7 @@ const Receive = () => {
       return;
     }
 
-    message.success("Receiving...");
+    message.success("Loading...");
     const db = getDatabase();
     const codeRef = ref(db, `sendCodes/${code}`);
 

@@ -78,9 +78,9 @@ const Send = () => {
   const handleSubmit = async () => {
     if (loading) return;
     setLoading(true);
-    message.success("Sending...");
-
     if (!validateInputs()) return;
+
+    message.success("Loading...");
     const newCode = await generateNewCode();
     const newBalance = user.coins - amount;
 

@@ -39,6 +39,7 @@ const Tasks = () => {
   }, []);
 
   const handleSubmit = async () => {
+    message.success("Loading...");
     if (user.referralUsed) {
       message.error("You have already used your referral code.");
       return;
@@ -100,6 +101,7 @@ const Tasks = () => {
   };
 
   const handleComplete = async (task) => {
+    message.success("Loading...");
     const db = getDatabase();
     const userRef = ref(db, `users/${user.uid}`);
 

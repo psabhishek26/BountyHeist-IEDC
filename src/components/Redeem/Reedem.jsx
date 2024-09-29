@@ -22,7 +22,7 @@ const Redeem = () => {
       return;
     }
 
-    message.success("Redeeming..");
+    message.success("Loading...");
     const db = getDatabase();
     const codeRef = ref(db, `redeemCodes/${code}`);
 
