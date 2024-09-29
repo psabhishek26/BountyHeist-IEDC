@@ -10,6 +10,8 @@ import { auth } from "./firebase";
 import { useEffect, useContext } from "react";
 import { UserContext } from "./context/UserContext";
 import { getDatabase, ref, onValue } from "firebase/database";
+import AddTask from "./pages/AddTask/AddTask";
+import AdminRoute from "./components/AdminRoute";
 
 function App() {
   const navigate = useNavigate();
@@ -50,6 +52,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/coming" element={<ComingSoon />} />
         <Route path="/landing" element={<Landing />} />
+        <Route
+          path="/addtask"
+          element={
+            <AdminRoute>
+              <AddTask />
+            </AdminRoute>
+          }
+        />
       </Routes>
     </>
   );
