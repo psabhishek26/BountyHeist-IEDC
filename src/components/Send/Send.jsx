@@ -15,6 +15,11 @@ const Send = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const validateInputs = () => {
+    if (user.coins >= 2000) {
+      message.error("You have reached the limit of 2000 coins and cannot send more.");
+      return false;
+    }
+
     if (amount <= 0) {
       message.error("You need to enter a valid amount!");
       return false;

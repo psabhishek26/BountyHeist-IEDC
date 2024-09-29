@@ -131,7 +131,6 @@ function Home() {
             >
               Redeem
             </button>
-            {!user.coins >= 2000 && (
               <button
                 className={activeButton === "send" ? "veedlink" : "veedlinkmon"}
                 value="send"
@@ -139,7 +138,6 @@ function Home() {
               >
                 Send
               </button>
-            )}
             <button
               className={
                 activeButton === "receive" ? "veedlink" : "veedlinkmon"
