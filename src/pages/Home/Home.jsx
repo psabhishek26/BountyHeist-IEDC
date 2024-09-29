@@ -1,30 +1,30 @@
-import React, { useState, useContext, useEffect } from 'react';
-import './home.css';
+import React, { useState, useContext, useEffect } from "react";
+import "./home.css";
 import Coins from "../../img/coins.png";
-import Redeem from '../../components/Redeem/Reedem';
-import Receive from '../../components/Receive/Receive';
-import { CopyOutlined } from '@ant-design/icons'; 
-import { Button, message, Space } from 'antd';
-import Send from '../../components/Send/Send';
-import Tasks from '../../components/Tasks/Tasks';
-import { UserContext } from '../../context/UserContext';
+import Redeem from "../../components/Redeem/Reedem";
+import Receive from "../../components/Receive/Receive";
+import { CopyOutlined } from "@ant-design/icons";
+import { Button, message, Space } from "antd";
+import Send from "../../components/Send/Send";
+import Tasks from "../../components/Tasks/Tasks";
+import { UserContext } from "../../context/UserContext";
 
 function Home() {
   const { user } = useContext(UserContext);
-  const [activeButton, setActiveButton] = useState('redeem'); 
+  const [activeButton, setActiveButton] = useState("redeem");
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [visible, setVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
 
   const success = () => {
     messageApi.open({
-      type: 'success',
-      content: 'This is a success message',
+      type: "success",
+      content: "This is a success message",
     });
   };
 
   const handleButtonClick = (buttonValue) => {
-    setActiveButton(buttonValue); 
+    setActiveButton(buttonValue);
   };
   const handleClose = () => {
     setVisible(false);
@@ -39,30 +39,44 @@ function Home() {
     const referralId = document.getElementById("referral-id").textContent;
     navigator.clipboard.writeText(referralId);
     messageApi.open({
-      type: 'success',
-      content: 'Referral Id Copied Sucessfully !',
+      type: "success",
+      content: "Referral Id Copied Sucessfully !",
     });
   };
 
   const renderContent = () => {
     switch (activeButton) {
-      case 'redeem':
-        return <div className="content">
-          <Redeem/>
-        </div>;
-      case 'send':
-        return <div className="content"><Send/></div>;
-      case 'receive':
-        return <div className="content"><Receive/></div>;
-      case 'tasks':
-        return <div className="content"><Tasks/></div>;
+      case "redeem":
+        return (
+          <div className="content">
+            <Redeem />
+          </div>
+        );
+      case "send":
+        return (
+          <div className="content">
+            <Send />
+          </div>
+        );
+      case "receive":
+        return (
+          <div className="content">
+            <Receive />
+          </div>
+        );
+      case "tasks":
+        return (
+          <div className="content">
+            <Tasks />
+          </div>
+        );
       default:
         return <div className="content">Please select an option</div>;
     }
   };
 
   return (
-    <div className='veed'>
+    <div className="veed">
       {contextHolder}
       {/* {visible ? (
         <Alert
@@ -85,57 +99,65 @@ function Home() {
           <p>{user.coins}</p>
         </div>
       </div>
-      
+
       <div className="veedtask">
         <div className="veedmenu">
           <div className="veedmenu1">
             <button
-              className={activeButton === 'redeem' ? 'veedlink' : 'veedlinkmon'}
+              className={activeButton === "redeem" ? "veedlink" : "veedlinkmon"}
               value="redeem"
-              onClick={() => handleButtonClick('redeem')}
+              onClick={() => handleButtonClick("redeem")}
             >
               Redeem
             </button>
+            {!user.coins >= 2000 && (
+              <button
+                className={activeButton === "send" ? "veedlink" : "veedlinkmon"}
+                value="send"
+                onClick={() => handleButtonClick("send")}
+              >
+                Send
+              </button>
+            )}
             <button
-              className={activeButton === 'send' ? 'veedlink' : 'veedlinkmon'}
-              value="send"
-              onClick={() => handleButtonClick('send')}
-            >
-              Send
-            </button>
-            <button
-              className={activeButton === 'receive' ? 'veedlink' : 'veedlinkmon'}
+              className={
+                activeButton === "receive" ? "veedlink" : "veedlinkmon"
+              }
               value="receive"
-              onClick={() => handleButtonClick('receive')}
+              onClick={() => handleButtonClick("receive")}
             >
               Receive
             </button>
             <button
-              className={activeButton === 'tasks' ? 'veedlink' : 'veedlinkmon'}
+              className={activeButton === "tasks" ? "veedlink" : "veedlinkmon"}
               value="tasks"
-              onClick={() => handleButtonClick('tasks')}
+              onClick={() => handleButtonClick("tasks")}
             >
               Tasks
             </button>
           </div>
         </div>
 
-        <div className="veedcontent">
-          {renderContent()}
-        </div>
+        <div className="veedcontent">{renderContent()}</div>
       </div>
 
       {isModalOpen && (
         <div className="modal-backdrop" onClick={toggleModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-content">
-              <span className="close" onClick={toggleModal}>&times;</span>
-              <h3 style={{ textAlign: 'center' }}>{user.username}</h3>
-              <p style={{ textAlign: 'center' }}>
+              <span className="close" onClick={toggleModal}>
+                &times;
+              </span>
+              <h3 style={{ textAlign: "center" }}>{user.username}</h3>
+              <p style={{ textAlign: "center" }}>
                 Referral ID: <span id="referral-id">{user.referralCode}</span>
-                <CopyOutlined 
-                  onClick={copyToClipboard} 
-                  style={{ marginLeft: '10px', color: 'black', cursor: 'pointer' }} 
+                <CopyOutlined
+                  onClick={copyToClipboard}
+                  style={{
+                    marginLeft: "10px",
+                    color: "black",
+                    cursor: "pointer",
+                  }}
                 />
               </p>
             </div>
