@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./landing.css";
 import Coins from "../../img/coins.png";
 import Kuttu from "../../img/avarat.png";
-import { Button } from "antd";
+import { Button, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { UserContext } from "../../context/UserContext";
@@ -37,6 +37,14 @@ function Landing() {
     });
   }, []);
 
+  if (loading) {
+    return (
+      <div className="loading">
+        <Spin size="large"></Spin>
+      </div>
+    );
+  }
+
   return (
     <div className="veed">
       <div className="landhead">
@@ -54,23 +62,19 @@ function Landing() {
 
       <div className="landlead">
         <h3>Leaderboard</h3>
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          leaderboard.map((user, index) => (
-            <div className="leaders" key={index}>
-              <h3>{index+1}</h3>
-              <div className="leaddet">
-                <img src={Kuttu} alt="Kuttu" />
-                <p>@{user.username}</p>
-                <div className="mejoin-coins">
-                  <img className="nanayam" src={Coins} alt="coiner" />
-                  <h3>{user.coins}</h3>
-                </div>
+        {leaderboard.map((user, index) => (
+          <div className="leaders" key={index}>
+            <h3>{index + 1}</h3>
+            <div className="leaddet">
+              <img src={Kuttu} alt="Kuttu" />
+              <p>@{user.username}</p>
+              <div className="mejoin-coins">
+                <img className="nanayam" src={Coins} alt="coiner" />
+                <h3>{user.coins}</h3>
               </div>
             </div>
-          ))
-        )}
+          </div>
+        ))}
       </div>
     </div>
   );
