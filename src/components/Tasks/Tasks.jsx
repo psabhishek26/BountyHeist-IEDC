@@ -1,16 +1,45 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./tasks.css";
 import Coins from "../../img/coins.png";
-import { Flex, Input, Typography, message } from "antd";
+import { Flex, Input, message, Spin } from "antd";
 import { UserContext } from "../../context/UserContext";
 import { getDatabase, ref, get, update } from "firebase/database";
 
 const Tasks = () => {
   const { user, setUser } = useContext(UserContext);
   const [code, setCode] = useState("");
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const db = getDatabase();
+      const tasksRef = ref(db, "tasks");
+      try {
+        const snapshot = await get(tasksRef);
+        if (snapshot.exists()) {
+          const tasksData = snapshot.val();
+          const tasksArray = Object.keys(tasksData).map((key) => ({
+            id: key,
+            ...tasksData[key],
+          }));
+          setTasks(tasksArray);
+        } else {
+          message.warning("No tasks found.");
+        }
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+        message.error("Failed to fetch tasks. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTasks();
+  }, []);
 
   const handleSubmit = async () => {
-    if (user.referralused) {
+    if (user.referralUsed) {
       message.error("You have already used your referral code.");
       return;
     }
@@ -70,6 +99,43 @@ const Tasks = () => {
     }
   };
 
+  const handleComplete = async (task) => {
+    const db = getDatabase();
+    const userRef = ref(db, `users/${user.uid}`);
+
+    try {
+      const userSnapshot = await get(userRef);
+      const userData = userSnapshot.val();
+
+      const updatedCoins = (userData.coins || 0) + parseInt(task.taskPoints);
+      window.location.href = task.redirectLink;
+
+      await update(userRef, {
+        coins: updatedCoins,
+        completedTasks: [...(userData.completedTasks || []), task.id],
+      });
+
+      setUser((prevUser) => ({
+        ...prevUser,
+        coins: updatedCoins,
+        completedTasks: [...(prevUser.completedTasks || []), task.id],
+      }));
+
+      message.success(`Task completed! You earned ${task.taskPoints} coins.`);
+    } catch (error) {
+      console.error("Error completing task:", error);
+      message.error("Failed to complete task. Please try again.");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="loading">
+        <Spin size="large"></Spin>
+      </div>
+    );
+  }
+
   return (
     <div className="tasku">
       {!user.referralUsed && (
@@ -94,48 +160,35 @@ const Tasks = () => {
         </div>
       )}
 
-      {/* Tasks Section */}
       <p className="taskup">
         Complete the following tasks to receive even more rewards
       </p>
 
       <div className="taskgrid">
-        <div className="taskind">
-          <h3>Task 1</h3>
-          <div className="tcoin">
-            <img src={Coins} alt="Coins image" />
-            <p>500</p>
+        {tasks.map((task) => (
+          <div
+            className={`taskind ${
+              user.completedTasks?.includes(task.id) ? "completed" : ""
+            }`}
+            key={task.id}
+          >
+            <h3>{task.taskName}</h3>
+            <div className="tcoin">
+              <img src={Coins} alt="Coins image" />
+              <p>{task.taskPoints}</p>
+            </div>
+            <p>{task.taskDescription}</p>
+            <button
+              className="comp"
+              onClick={() => handleComplete(task)}
+              disabled={user.completedTasks?.includes(task.id)}
+            >
+              {user.completedTasks?.includes(task.id)
+                ? "Completed"
+                : "Complete"}
+            </button>
           </div>
-          <p>Description of Task 1</p>
-          <button className="comp">Complete</button>
-        </div>
-        <div className="taskind">
-          <h3>Task 2</h3>
-          <div className="tcoin">
-            <img src={Coins} alt="Coins image" />
-            <p>400</p>
-          </div>
-          <p>Description of Task 2</p>
-          <button className="comp">Complete</button>
-        </div>
-        <div className="taskind">
-          <h3>Task 3</h3>
-          <div className="tcoin">
-            <img src={Coins} alt="Coins image" />
-            <p>200</p>
-          </div>
-          <p>Description of Task 3</p>
-          <button className="comp">Complete</button>
-        </div>
-        <div className="taskind">
-          <h3>Task 4</h3>
-          <div className="tcoin">
-            <img src={Coins} alt="Coins image" />
-            <p>1500</p>
-          </div>
-          <p>Description of Task 4</p>
-          <button className="comp">Complete</button>
-        </div>
+        ))}
       </div>
     </div>
   );

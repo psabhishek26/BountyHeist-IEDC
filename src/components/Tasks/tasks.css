@@ -15,6 +15,13 @@ font-weight: 400;
 line-height: normal;
 text-align: center;
 }
+.loading {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+}
 .taskgrid
 {
     display: grid;
