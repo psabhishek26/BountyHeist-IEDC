@@ -5,7 +5,7 @@ import { UserContext } from '../context/UserContext';
 const AdminRoute = ({ children }) => {
   const { user } = useContext(UserContext);
 
-  return user.admin ? children : <Navigate to="/" />;
+  return (user || user?.admin) ? children : <Navigate to="/" />;
 };
 
 export default AdminRoute;
