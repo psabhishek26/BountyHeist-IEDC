@@ -63,11 +63,11 @@ const Redeem = () => {
   return (
     <div className="redeemdiv">
       <h3>Enter Code to Redeem</h3>
-      <p>Enter 8-character alphanumeric code that was generated</p>
+      <p>Enter 8-character alphanumeric code</p>
 
       <Flex className="optt" gap="middle" align="flex-start" vertical>
         <Input.OTP
-          length={7}
+          length={8}
           size="large"
           formatter={(str) => str.toUpperCase()}
           onChange={(e) => setCode(e)}
