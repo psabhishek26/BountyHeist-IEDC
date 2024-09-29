@@ -53,6 +53,7 @@ const Login = () => {
             email: user.email,
             uid: user.uid,
             coins: 100,
+            referralUsed: false,
             referralCode: uniqueCode,
           };
 
