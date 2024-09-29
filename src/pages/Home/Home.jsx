@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import "./home.css";
 import Coins from "../../img/coins.png";
 import Redeem from "../../components/Redeem/Reedem";
@@ -8,9 +8,13 @@ import { Button, message, Space } from "antd";
 import Send from "../../components/Send/Send";
 import Tasks from "../../components/Tasks/Tasks";
 import { UserContext } from "../../context/UserContext";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
   const [activeButton, setActiveButton] = useState("redeem");
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [visible, setVisible] = useState(false);
@@ -42,6 +46,20 @@ function Home() {
       type: "success",
       content: "Referral Id Copied Sucessfully !",
     });
+  };
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        localStorage.removeItem("user");
+        setUser(null);
+        message.success("Successfully signed out!");
+        navigate("/landing");
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+        message.error("Sign-out failed");
+      });
   };
 
   const renderContent = () => {
@@ -89,6 +107,9 @@ function Home() {
       ) : null} */}
       <div className="vhead">
         <div className="veednav">
+          <button className={"veedlink"} onClick={() => handleSignOut()}>
+            SignOut
+          </button>
           <div className="veednav1" onClick={toggleModal}>
             <h3>{user.username}</h3>
             <p>Referral ID</p>
