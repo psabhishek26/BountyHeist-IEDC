@@ -110,6 +110,9 @@ function Home() {
           <button className={"veedlink"} onClick={() => handleSignOut()}>
             SignOut
           </button>
+          <button className={"veedlink"} onClick={() => navigate('/landing')}>
+            Leaderboard
+          </button>
           <div className="veednav1" onClick={toggleModal}>
             <h3>{user.username}</h3>
             <p>Referral ID</p>
@@ -131,13 +134,13 @@ function Home() {
             >
               Redeem
             </button>
-              <button
-                className={activeButton === "send" ? "veedlink" : "veedlinkmon"}
-                value="send"
-                onClick={() => handleButtonClick("send")}
-              >
-                Send
-              </button>
+            <button
+              className={activeButton === "send" ? "veedlink" : "veedlinkmon"}
+              value="send"
+              onClick={() => handleButtonClick("send")}
+            >
+              Send
+            </button>
             <button
               className={
                 activeButton === "receive" ? "veedlink" : "veedlinkmon"
