@@ -139,9 +139,9 @@ const Tasks = () => {
   }
 
   return (
-    <div className="tasku">
+    <div className="tasku" style={{paddingTop : "10px"}}>
       {!user.referralUsed && (
-        <div className="redeemdiv">
+        <div className="redeemdiv" style={{paddingTop : "10px"}}>
           <h3>Enter the Referral-Code</h3>
           <p>
             Enter the 6-character alphanumeric referral code provided by your

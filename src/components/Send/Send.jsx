@@ -111,9 +111,9 @@ const Send = () => {
   };
 
   return (
-    <div className="send">
+    <div className="send" style={{paddingTop : "10px"}}>
       {contextHolder}
-      <div className="sendhead">
+      <div className="sendhead" style={{paddingTop : "10px"}}>
         <h3>Send</h3>
         <p>Enter the amount to transfer</p>
         <div className="sendcoins">

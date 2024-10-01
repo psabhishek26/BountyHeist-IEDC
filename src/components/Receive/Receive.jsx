@@ -62,7 +62,7 @@ const Receive = () => {
   };
 
   return (
-    <div className="redeemdiv">
+    <div className="redeemdiv" style={{paddingTop : "10px"}}>
       <h3>Enter Code to Receive</h3>
       <p>Enter 7-character alphanumeric code that was generated</p>
 

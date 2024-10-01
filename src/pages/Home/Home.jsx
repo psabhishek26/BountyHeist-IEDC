@@ -4,7 +4,7 @@ import Coins from "../../img/coins.png";
 import Redeem from "../../components/Redeem/Reedem";
 import Receive from "../../components/Receive/Receive";
 import { CopyOutlined } from "@ant-design/icons";
-import { Button, message, Space } from "antd";
+import { Button, message, Progress, Tooltip } from "antd";
 import Send from "../../components/Send/Send";
 import Tasks from "../../components/Tasks/Tasks";
 import { UserContext } from "../../context/UserContext";
@@ -17,37 +17,37 @@ function Home() {
   const { user, setUser } = useContext(UserContext);
   const [activeButton, setActiveButton] = useState("redeem");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [visible, setVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const success = () => {
-    messageApi.open({
-      type: "success",
-      content: "This is a success message",
-    });
+
+  const tiers = {
+    tier1: 2000,
+    tier2: 2800,
+    tier3: 3600,
+    grandPrize: 5000,
+  };
+  // Determine the current tier
+  const getCurrentTier = () => {
+    const { coins } = user;
+
+    if (coins >= tiers.grandPrize) return "Grand Prize";
+    if (coins >= tiers.tier3) return "Tier 3";
+    if (coins >= tiers.tier2) return "Tier 2";
+    if (coins >= tiers.tier1) return "Tier 1";
+    return "No Tier Reached";
   };
 
-  const handleButtonClick = (buttonValue) => {
-    setActiveButton(buttonValue);
-  };
-  const handleClose = () => {
-    setVisible(false);
-  };
+  // Calculate the progress percentage based on the user's coins
+  const calculateProgress = () => {
+    const { coins } = user;
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+    if (coins >= tiers.grandPrize) return 100;
+    if (coins >= tiers.tier3) return ((coins - tiers.tier3) / (tiers.grandPrize - tiers.tier3)) * 28 + 72;
+    if (coins >= tiers.tier2) return ((coins - tiers.tier2) / (tiers.tier3 - tiers.tier2)) * 16 + 56;
+    if (coins >= tiers.tier1) return ((coins - tiers.tier1) / (tiers.tier2 - tiers.tier1)) * 16 + 40;
+    return (coins / tiers.tier1) * 40;
   };
-  // const alert = <Alert message="Success Tips" type="success" showIcon />
-
-  const copyToClipboard = () => {
-    const referralId = document.getElementById("referral-id").textContent;
-    navigator.clipboard.writeText(referralId);
-    messageApi.open({
-      type: "success",
-      content: "Referral Id Copied Sucessfully !",
-    });
-  };
-
+  // Handle sign-out
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
@@ -62,57 +62,47 @@ function Home() {
       });
   };
 
+  // Toggle modal visibility
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+
+  // Copy referral ID to clipboard
+  const copyToClipboard = () => {
+    const referralId = document.getElementById("referral-id").textContent;
+    navigator.clipboard.writeText(referralId);
+    messageApi.open({
+      type: "success",
+      content: "Referral ID Copied Successfully!",
+    });
+  };
+
+  // Button click handler
+  const handleButtonClick = (buttonValue) => setActiveButton(buttonValue);
+
+  // Render content based on active button
   const renderContent = () => {
     switch (activeButton) {
       case "redeem":
-        return (
-          <div className="content">
-            <Redeem />
-          </div>
-        );
+        return <Redeem />;
       case "send":
-        return (
-          <div className="content">
-            <Send />
-          </div>
-        );
+        return <Send />;
       case "receive":
-        return (
-          <div className="content">
-            <Receive />
-          </div>
-        );
+        return <Receive />;
       case "tasks":
-        return (
-          <div className="content">
-            <Tasks />
-          </div>
-        );
+        return <Tasks />;
       default:
-        return <div className="content">Please select an option</div>;
+        return <div>Please select an option</div>;
     }
   };
 
   return (
     <div className="veed">
       {contextHolder}
-      {/* {visible ? (
-        <Alert
-          message="Success Tips"
-          description="Detailed description and advice about successful copywriting."
-          type="success"
-          closable
-          onClose={handleClose}
-        />
-      ) : null} */}
+
+      {/* Header section */}
       <div className="vhead">
         <div className="veednav">
-          <button className={"veedlink"} onClick={() => handleSignOut()}>
-            SignOut
-          </button>
-          <button className={"veedlink"} onClick={() => navigate('/landing')}>
-            Leaderboard
-          </button>
+          <button className="veedlink" onClick={handleSignOut}>SignOut</button>
+          <button className="veedlink" onClick={() => navigate("/landing")}>Leaderboard</button>
           <div className="veednav1" onClick={toggleModal}>
             <h3>{user.username}</h3>
             <p>Referral ID</p>
@@ -124,35 +114,31 @@ function Home() {
         </div>
       </div>
 
+      {/* Task buttons */}
       <div className="veedtask">
         <div className="veedmenu">
+          
           <div className="veedmenu1">
             <button
               className={activeButton === "redeem" ? "veedlink" : "veedlinkmon"}
-              value="redeem"
               onClick={() => handleButtonClick("redeem")}
             >
               Redeem
             </button>
             <button
               className={activeButton === "send" ? "veedlink" : "veedlinkmon"}
-              value="send"
               onClick={() => handleButtonClick("send")}
             >
               Send
             </button>
             <button
-              className={
-                activeButton === "receive" ? "veedlink" : "veedlinkmon"
-              }
-              value="receive"
+              className={activeButton === "receive" ? "veedlink" : "veedlinkmon"}
               onClick={() => handleButtonClick("receive")}
             >
               Receive
             </button>
             <button
               className={activeButton === "tasks" ? "veedlink" : "veedlinkmon"}
-              value="tasks"
               onClick={() => handleButtonClick("tasks")}
             >
               Tasks
@@ -160,32 +146,39 @@ function Home() {
           </div>
         </div>
 
+        {/* Progress Section */}
+      <div style={{ paddingTop: "40px",paddingLeft:"20px",paddingRight:"20px", textAlign: "center" }}>
+        <h3 className="toolcoin">Progress Bar</h3>
+        <Tooltip title={`Current Tier: ${getCurrentTier()}`}>
+          <Progress percent={calculateProgress()} />
+        </Tooltip>
+        {user.coins === 2000 ? (<p className="toolcoin">Teir 1 Completed</p>) : user.coins === 2800 ? (<p className="toolcoin">Teir 2 Completed</p>) : user.coins === 3600 ? (<p className="toolcoin">Teir 3 Completed</p>) : user.coins === 5000 ? (<p className="toolcoin">Grand Prize</p>) : (<p></p>)}
+      </div>
+      
+        {/* Render dynamic content */}
         <div className="veedcontent">{renderContent()}</div>
       </div>
 
+      {/* Modal for referral ID */}
       {isModalOpen && (
         <div className="modal-backdrop" onClick={toggleModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-content">
-              <span className="close" onClick={toggleModal}>
-                &times;
-              </span>
+              <span className="close" onClick={toggleModal}>&times;</span>
               <h3 style={{ textAlign: "center" }}>{user.username}</h3>
               <p style={{ textAlign: "center" }}>
                 Referral ID: <span id="referral-id">{user.referralCode}</span>
                 <CopyOutlined
                   onClick={copyToClipboard}
-                  style={{
-                    marginLeft: "10px",
-                    color: "black",
-                    cursor: "pointer",
-                  }}
+                  style={{ marginLeft: "10px", color: "black", cursor: "pointer" }}
                 />
               </p>
             </div>
           </div>
         </div>
       )}
+
+      
     </div>
   );
 }
