@@ -150,7 +150,7 @@ function Home() {
       <div style={{ paddingTop: "40px",paddingLeft:"20px",paddingRight:"20px", textAlign: "center" }}>
         <h3 className="toolcoin">Progress Bar</h3>
         <Tooltip title={`Current Tier: ${getCurrentTier()}`}>
-          <Progress percent={calculateProgress()} />
+          <Progress percent={parseInt(calculateProgress())} />
         </Tooltip>
         {user.coins === 2000 ? (<p className="toolcoin">Teir 1 Completed</p>) : user.coins === 2800 ? (<p className="toolcoin">Teir 2 Completed</p>) : user.coins === 3600 ? (<p className="toolcoin">Teir 3 Completed</p>) : user.coins === 5000 ? (<p className="toolcoin">Grand Prize</p>) : (<p></p>)}
       </div>
