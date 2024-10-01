@@ -3,12 +3,7 @@ import "./tasks.css";
 import Coins from "../../img/coins.png";
 import { Flex, Input, message, Spin } from "antd";
 import { UserContext } from "../../context/UserContext";
-import {
-  getDatabase,
-  ref,
-  get,
-  runTransaction,
-} from "firebase/database";
+import { getDatabase, ref, get, runTransaction } from "firebase/database";
 
 const Tasks = () => {
   const { user, setUser } = useContext(UserContext);
@@ -44,11 +39,6 @@ const Tasks = () => {
   }, []);
 
   const handleSubmit = async () => {
-    if (user.referralUsed) {
-      message.error("You have already used your referral code.");
-      return;
-    }
-
     const codeRegex = /^[A-Z0-9]+$/;
     if (code.length !== 6 || !codeRegex.test(code)) {
       message.error("Invalid code.");
@@ -56,7 +46,7 @@ const Tasks = () => {
     }
 
     if (code === user.referralCode) {
-      message.success("Nice try.");
+      message.success("Nice try diddy.");
       return;
     }
 
@@ -66,45 +56,46 @@ const Tasks = () => {
 
     try {
       const snapshot = await get(codeRef);
-
       if (snapshot.exists()) {
         const referralUid = snapshot.val().uid;
+
+        const referralUserRef = ref(db, `users/${referralUid}`);
+        const referralUserSnapshot = await get(referralUserRef);
+        const referralUserData = referralUserSnapshot.val();
+
+        if (referralUserData.referralCount >= 6) {
+          message.error("Sorry, this referral code has been used 6 times.");
+        }
+
         const userSnapshot = await get(userRef);
         const userData = userSnapshot.val();
 
-        if (userData.referralUsed) {
-          message.error("You have already used a referral code.");
-        } else {
-          const updatedCoins = (userData.coins || 0) + 50;
-          await runTransaction(userRef, (currentData) => {
-            if (currentData) {
-              currentData.referralUsed = true;
-              currentData.coins = updatedCoins;
-            }
-            return currentData;
-          }).catch((error) => {
-            console.error("Transaction failed for referral: ", error);
-          });
+        const updatedCoins = (userData.coins || 0) + 50;
+        await runTransaction(userRef, (currentData) => {
+          if (currentData) {
+            currentData.referralUsed = true;
+            currentData.coins = updatedCoins;
+          }
+          return currentData;
+        }).catch((error) => {
+          console.error("Transaction failed for referral: ", error);
+        });
 
-          const referralUserRef = ref(db, `users/${referralUid}`);
-          const referralUserSnapshot = await get(referralUserRef);
-          const referralUserData = referralUserSnapshot.val();
-          await runTransaction(referralUserRef, (currentData) => {
-            if (currentData) {
-              currentData.coins = (referralUserData.coins || 0) + 100;
-            }
-            return currentData;
-          }).catch((error) => {
-            console.error("Transaction failed for referral: ", error);
-          });
+        await runTransaction(referralUserRef, (currentData) => {
+          if (currentData) {
+            currentData.coins = (referralUserData.coins || 0) + 100;
+          }
+          return currentData;
+        }).catch((error) => {
+          console.error("Transaction failed for referral: ", error);
+        });
 
-          setUser((prevUser) => ({
-            ...prevUser,
-            referralUsed: true,
-            coins: updatedCoins,
-          }));
-          message.success("Referral code accepted! You earned 50 coins.");
-        }
+        setUser((prevUser) => ({
+          ...prevUser,
+          referralUsed: true,
+          coins: updatedCoins,
+        }));
+        message.success("Referral code accepted! You earned 50 coins.");
       } else {
         message.error("Invalid referral code.");
       }
@@ -115,6 +106,8 @@ const Tasks = () => {
   };
 
   const handleComplete = async (task) => {
+    window.location.href = task.redirectLink;
+    
     const db = getDatabase();
     const userRef = ref(db, `users/${user.uid}`);
 
@@ -123,12 +116,14 @@ const Tasks = () => {
       const userData = userSnapshot.val();
 
       const updatedCoins = (userData.coins || 0) + parseInt(task.taskPoints);
-      window.location.href = task.redirectLink;
 
       await runTransaction(userRef, (currentData) => {
         if (currentData) {
           currentData.coins = updatedCoins;
-          completedTasks = [...(userData.completedTasks || []), task.id];
+          currentData.completedTasks = [
+            ...(userData.completedTasks || []),
+            task.id,
+          ];
         }
         return currentData;
       }).catch((error) => {
