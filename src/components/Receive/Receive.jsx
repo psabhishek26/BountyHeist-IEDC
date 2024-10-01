@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Flex, Input, Typography, message } from "antd";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, runTransaction, get } from "firebase/database";
 import "./receive.css";
 import { UserContext } from "../../context/UserContext";
 
@@ -11,7 +11,7 @@ const Receive = () => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (loading) return;
     setLoading(true);
 
@@ -22,47 +22,46 @@ const Receive = () => {
       return;
     }
 
-    message.success("Loading...");
     const db = getDatabase();
-    const codeRef = ref(db, `sendCodes/${code}`);
+    const codeRef = ref(db, `sendCodes/${code}/amount`);
 
-    get(codeRef)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          const receivedAmount = data.amount * 0.5;
-
-          const userRef = ref(db, `users/${user.uid}/coins`);
-          const newBalance = user.coins + receivedAmount;
-
-          set(userRef, newBalance)
-            .then(() => set(codeRef, null))
-            .then(() => {
-              message.success(
-                `Coins received successfully! You've gained ${receivedAmount} coins.`
-              );
-              setUser((prevUser) => ({ ...prevUser, coins: newBalance }));
-              setCode("");
-            })
-            .catch((error) => {
-              console.error("Error processing transaction:", error);
-              message.error("Failed to receive coins. Please try again.");
-            });
-        } else {
-          message.error("This code is expired.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error checking code:", error);
-        message.error("Failed to redeem code. Please try again.");
-      })
-      .finally(() => {
-        setLoading(false);
+    try {
+      let sendAmount = 0;
+      await runTransaction(codeRef, (codeData) => {
+        sendAmount = codeData;
+        return 0;
       });
+
+      if (sendAmount === 0) {
+        message.error("Code expired.");
+        return;
+      }
+
+      const receivedAmount = sendAmount * 0.5;
+      const userRef = ref(db, `users/${user.uid}/coins`);
+      await runTransaction(userRef, (currentCoins) => {
+        return (currentCoins || 0) + receivedAmount;
+      });
+
+      message.success(
+        `Coins received successfully! You've gained ${receivedAmount} coins.`
+      );
+      setUser((prevUser) => ({
+        ...prevUser,
+        coins: user.coins + receivedAmount,
+      }));
+
+      setCode("");
+    } catch (error) {
+      console.error("Error processing transaction:", error);
+      message.error("Failed to redeem code. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="redeemdiv" style={{paddingTop : "10px"}}>
+    <div className="redeemdiv">
       <h3>Enter Code to Receive</h3>
       <p>Enter 7-character alphanumeric code that was generated</p>
 
@@ -71,6 +70,7 @@ const Receive = () => {
           length={7}
           size="large"
           onChange={(e) => setCode(e)}
+          formatter={(str) => str.toUpperCase()}
           value={code}
         />
       </Flex>
