@@ -18,7 +18,7 @@ line-height: normal;
 width: 95%;
 text-align: center;
 }
-.loading {
+.loading-tasks {
     display: flex;
     flex: 1;
     justify-content: center;

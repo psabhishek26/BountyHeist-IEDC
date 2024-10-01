@@ -65,6 +65,7 @@ const Tasks = () => {
 
         if (referralUserData.referralCount >= 6) {
           message.error("Sorry, this referral code has been used 6 times.");
+          return;
         }
 
         const userSnapshot = await get(userRef);
@@ -84,6 +85,7 @@ const Tasks = () => {
         await runTransaction(referralUserRef, (currentData) => {
           if (currentData) {
             currentData.coins = (referralUserData.coins || 0) + 100;
+            currentData.referralCount = (referralUserData.referralCount || 0) + 1;
           }
           return currentData;
         }).catch((error) => {
@@ -107,7 +109,7 @@ const Tasks = () => {
 
   const handleComplete = async (task) => {
     window.location.href = task.redirectLink;
-    
+
     const db = getDatabase();
     const userRef = ref(db, `users/${user.uid}`);
 
@@ -145,7 +147,7 @@ const Tasks = () => {
 
   if (loading) {
     return (
-      <div className="loading">
+      <div className="loading-tasks">
         <Spin size="large"></Spin>
       </div>
     );
