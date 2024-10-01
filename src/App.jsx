@@ -12,6 +12,7 @@ import { UserContext } from "./context/UserContext";
 import { getDatabase, ref, onValue } from "firebase/database";
 import AddTask from "./pages/AddTask/AddTask";
 import AdminRoute from "./components/AdminRoute";
+import CoinProgressBar from "./components/CoinProg/CoinProg";
 
 function App() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ function App() {
         });
       } else {
         setUser(null);
-        navigate("/landing");
+        navigate("/");
       }
     });
 
@@ -44,12 +45,13 @@ function App() {
         <Route
           path="/"
           element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
+            // <PrivateRoute>
+              <ComingSoon />
+            // </PrivateRoute>
           }
         />
-        <Route path="/login" element={<Login />} />
+        {/* <Route path="/login" element={<Login />} />
+        <Route path="/prog" element={<CoinProgressBar/>}/>
         <Route path="/coming" element={<ComingSoon />} />
         <Route path="/landing" element={<Landing />} />
         <Route
@@ -59,7 +61,7 @@ function App() {
               <AddTask />
             </AdminRoute>
           }
-        />
+        /> */}
       </Routes>
     </>
   );

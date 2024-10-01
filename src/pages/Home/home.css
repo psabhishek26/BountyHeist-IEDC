@@ -1,5 +1,15 @@
 @media only screen and (max-width:768px)
 {
+  .toolcoin
+    {
+        color: var(--Danube-950, #1D2C4E);
+font-family: Onest;
+font-size: 24px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+margin: 0;
+    }
     .vhead
     {
         width: 100%;

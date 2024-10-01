@@ -4,9 +4,10 @@ import './comingsoon.css';
 const ComingSoon = () => {
   return (
     <div className='comingsoon'> 
-    <h3>Coming Soon ...</h3>
+    <h3>Starts Tommorow 09.00 am</h3>
       
     </div>
+
   )
 }
 

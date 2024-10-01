@@ -61,7 +61,7 @@ const Redeem = () => {
   };
 
   return (
-    <div className="redeemdiv">
+    <div className="redeemdiv" style={{paddingTop : "10px"}}>
       <h3>Enter Code to Redeem</h3>
       <p>Enter 8-character alphanumeric code</p>
 
