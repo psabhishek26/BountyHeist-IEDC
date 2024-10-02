@@ -4,7 +4,7 @@ import Coins from "../../img/coins.png";
 import { Flex, Input, message } from "antd";
 import { UserContext } from "../../context/UserContext";
 import { generateCodeSeven } from "../../utils/Utils";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get, runTransaction } from "firebase/database";
 import { CopyOutlined } from "@ant-design/icons";
 
 const Send = () => {
@@ -16,7 +16,9 @@ const Send = () => {
 
   const validateInputs = () => {
     if (user.coins >= 2000) {
-      message.error("You have reached the limit of 2000 coins and cannot send more.");
+      message.error(
+        "You have reached the limit of 2000 coins and cannot send more."
+      );
       return false;
     }
 
@@ -38,18 +40,25 @@ const Send = () => {
     return true;
   };
 
-  const updateUserCoins = (newBalance) => {
+  const updateUserCoins = async (newBalance) => {
     const db = getDatabase();
-    const userRef = ref(db, `users/${user.uid}`);
+    const userRef = ref(db, `users/${user.uid}/coins`);
 
-    return set(userRef, { ...user, coins: newBalance });
+    return runTransaction(userRef, (currentCoins) => {
+      if (currentCoins !== null) {
+        return newBalance;
+      }
+      return currentCoins;
+    }).catch((error) => {
+      console.error("Transaction failed for send: ", error);
+    });
   };
 
   const addSendCode = async (newCode) => {
     const db = getDatabase();
     const codesRef = ref(db, `sendCodes/${newCode}`);
 
-    return set(codesRef, {
+    return await set(codesRef, {
       amount: amount,
       sender: user.uid,
       timestamp: Date.now(),
@@ -78,27 +87,29 @@ const Send = () => {
   const handleSubmit = async () => {
     if (loading) return;
     setLoading(true);
-    if (!validateInputs()) return;
 
-    message.success("Loading...");
-    const newCode = await generateNewCode();
-    const newBalance = user.coins - amount;
+    if (!validateInputs()) {
+      setLoading(false);
+      return;
+    }
 
-    updateUserCoins(newBalance)
-      .then(() => addSendCode(newCode))
-      .then(() => {
-        message.success("Coins sent successfully!");
-        setUser((prevUser) => ({ ...prevUser, coins: newBalance }));
-        setCode(newCode);
-        setAmount(0);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        message.error("Failed to send coins. Please try again.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    try {
+      const newCode = await generateNewCode();
+      const newBalance = user.coins - amount;
+
+      await updateUserCoins(newBalance);
+      await addSendCode(newCode);
+
+      message.success("Coins sent successfully!");
+      setUser((prevUser) => ({ ...prevUser, coins: newBalance }));
+      setCode(newCode);
+      setAmount(0);
+    } catch (error) {
+      console.error("Error:", error);
+      message.error("Failed to send coins. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const copyToClipboard = () => {
@@ -111,9 +122,9 @@ const Send = () => {
   };
 
   return (
-    <div className="send" style={{paddingTop : "10px"}}>
+    <div className="send" style={{ paddingTop: "10px" }}>
       {contextHolder}
-      <div className="sendhead" style={{paddingTop : "10px"}}>
+      <div className="sendhead" style={{ paddingTop: "10px" }}>
         <h3>Send</h3>
         <p>Enter the amount to transfer</p>
         <div className="sendcoins">
@@ -122,7 +133,7 @@ const Send = () => {
             className="antdins"
             type="number"
             placeholder="0"
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => setAmount(parseInt(e.target.value, 10))}
             value={amount}
           />
         </div>

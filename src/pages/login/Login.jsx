@@ -54,6 +54,7 @@ const Login = () => {
             uid: user.uid,
             coins: 100,
             referralUsed: false,
+            referralCount: 0,
             referralCode: uniqueCode,
           };
 

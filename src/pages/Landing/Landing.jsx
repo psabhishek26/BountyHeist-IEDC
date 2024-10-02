@@ -54,7 +54,14 @@ function Landing() {
               <Button onClick={() => navigate("/login")}>Login</Button>
             </div>
             <div className="guides">
-              <Button>See Guidelines</Button>
+              <Button
+                onClick={() =>
+                  (window.location.href =
+                    "https://docs.google.com/document/d/1QBY1bny1GD_hHFfipLijo11GzAATSq-zw7fFeUztihQ/edit?usp=sharing")
+                }
+              >
+                See Guidelines
+              </Button>
             </div>
           </div>
         )}
