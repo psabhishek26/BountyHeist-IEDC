@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Flex, Input, Typography, message } from "antd";
-import { getDatabase, ref, runTransaction } from "firebase/database";
+import { getDatabase, ref, runTransaction, get, set } from "firebase/database";
 import "./redeem.css";
 import { UserContext } from "../../context/UserContext";
 
@@ -26,25 +26,19 @@ const Redeem = () => {
     const codeRef = ref(db, `redeemCodes/${code}`);
 
     try {
-      // let expired = false
-      // await runTransaction(codeRef, (status) => {
-      //   if (status) expired = true;
-      //   return true;
-      // });
-
-    await runTransaction(codeRef, (currentData) => {
-      if (currentData && currentData.expired) {
-        // If already expired in the database, do nothing (abort transaction)
-        return;
+      let expired = false
+      const snapshot = await get(codeRef)        
+      if (!snapshot.exists()) {
+          message.error("Invalid code.");
+          return;
       }
-    
-      // If not expired, set it to expired
-      return { ...currentData, expired: true };
-    });
+      expired = snapshot.val();
 
       if (expired) {
         message.error("Code expired.");
         return;
+      } else {
+        await set(codeRef, true);
       }
 
       const receivedAmount = 100;

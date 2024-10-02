@@ -43,7 +43,7 @@ function App() {
         });
       } else {
         setUser(null);
-        navigate("/");
+        navigate("/landing");
       }
     });
 
@@ -53,26 +53,32 @@ function App() {
   return (
     <>
       <Routes>
-        <Route
-          path="/"
-          element={
-            // <PrivateRoute>
-              <Home />
-          // </PrivateRoute>
-          }
-        />
-        {/* <Route path="/login" element={<Login />} />
-        <Route path="/prog" element={<CoinProgressBar/>}/>
-        <Route path="/coming" element={<ComingSoon />} />
-        <Route path="/landing" element={<Landing />} />
-        <Route
-          path="/addtask"
-          element={
-            <AdminRoute>
-              <AddTask />
-            </AdminRoute>
-          }
-        /> */}
+        {isComingSoon ? (
+          <Route path="*" element={<ComingSoon />} />
+        ) : (
+          <>
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/prog" element={<CoinProgressBar />} />
+            <Route path="/coming" element={<ComingSoon />} />
+            <Route path="/landing" element={<Landing />} />
+            <Route
+              path="/addtask"
+              element={
+                <AdminRoute>
+                  <AddTask />
+                </AdminRoute>
+              }
+            />
+          </>
+        )}
       </Routes>
     </>
   );
