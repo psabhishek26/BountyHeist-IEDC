@@ -56,12 +56,12 @@ function App() {
         <Route
           path="/"
           element={
-            <PrivateRoute>
-              <Home />
-             </PrivateRoute>
+            // <PrivateRoute>
+              <ComingSoon />
+            //  </PrivateRoute>
           }
         />
-        <Route path="/login" element={<Login />} />
+        {/* <Route path="/login" element={<Login />} />
         <Route path="/prog" element={<CoinProgressBar/>}/>
         <Route path="/coming" element={<ComingSoon />} />
         <Route path="/landing" element={<Landing />} />
@@ -72,7 +72,7 @@ function App() {
               <AddTask />
             </AdminRoute>
           }
-        />
+        /> */}
       </Routes>
     </>
   );
