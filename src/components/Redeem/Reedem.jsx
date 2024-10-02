@@ -28,7 +28,7 @@ const Redeem = () => {
     try {
       let expired = false
       await runTransaction(codeRef, (status) => {
-        if (status) expired = true;
+        if (status == null || status) expired = true;
         return true;
       });
 
