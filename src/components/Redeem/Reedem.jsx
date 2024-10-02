@@ -26,11 +26,21 @@ const Redeem = () => {
     const codeRef = ref(db, `redeemCodes/${code}`);
 
     try {
-      let expired = false
-      await runTransaction(codeRef, (status) => {
-        if (status) expired = true;
-        return true;
-      });
+      // let expired = false
+      // await runTransaction(codeRef, (status) => {
+      //   if (status) expired = true;
+      //   return true;
+      // });
+
+    await runTransaction(codeRef, (currentData) => {
+      if (currentData && currentData.expired) {
+        // If already expired in the database, do nothing (abort transaction)
+        return;
+      }
+    
+      // If not expired, set it to expired
+      return { ...currentData, expired: true };
+    });
 
       if (expired) {
         message.error("Code expired.");
